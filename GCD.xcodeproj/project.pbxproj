@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		291E01EC1F43EACF00F390EB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 291E01EE1F43EACF00F390EB /* Localizable.strings */; };
+		291E01F21F43EBDB00F390EB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 291E01F11F43EBDB00F390EB /* Info.plist */; };
+		291E01F51F43F08C00F390EB /* InfoPllist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 291E01F71F43F08C00F390EB /* InfoPllist.strings */; };
 		FA6BD9C41EE7C801005F2EF3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6BD9C31EE7C801005F2EF3 /* main.m */; };
 		FA6BD9C71EE7C801005F2EF3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6BD9C61EE7C801005F2EF3 /* AppDelegate.m */; };
 		FA6BD9CA1EE7C801005F2EF3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6BD9C91EE7C801005F2EF3 /* ViewController.m */; };
@@ -36,6 +39,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		291E01D51F43E3C800F390EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		291E01D61F43E3C800F390EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		291E01D71F43E3DF00F390EB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		291E01D81F43E3DF00F390EB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		291E01ED1F43EACF00F390EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		291E01EF1F43EAD200F390EB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		291E01F01F43EAD400F390EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		291E01F11F43EBDB00F390EB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		291E01F61F43F08C00F390EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPllist.strings; sourceTree = "<group>"; };
+		291E01F81F43F09000F390EB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPllist.strings"; sourceTree = "<group>"; };
+		291E01F91F43F09100F390EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPllist.strings; sourceTree = "<group>"; };
 		FA6BD9BF1EE7C801005F2EF3 /* GCD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GCD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA6BD9C31EE7C801005F2EF3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FA6BD9C51EE7C801005F2EF3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -46,7 +60,6 @@
 		FA6BD9CF1EE7C801005F2EF3 /* GCD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GCD.xcdatamodel; sourceTree = "<group>"; };
 		FA6BD9D11EE7C801005F2EF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA6BD9D41EE7C801005F2EF3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		FA6BD9D61EE7C801005F2EF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA6BD9DB1EE7C801005F2EF3 /* GCDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GCDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA6BD9DF1EE7C801005F2EF3 /* GCDTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCDTests.m; sourceTree = "<group>"; };
 		FA6BD9E11EE7C801005F2EF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -110,7 +123,9 @@
 				FA6BD9CB1EE7C801005F2EF3 /* Main.storyboard */,
 				FA6BD9D11EE7C801005F2EF3 /* Assets.xcassets */,
 				FA6BD9D31EE7C801005F2EF3 /* LaunchScreen.storyboard */,
-				FA6BD9D61EE7C801005F2EF3 /* Info.plist */,
+				291E01F11F43EBDB00F390EB /* Info.plist */,
+				291E01EE1F43EACF00F390EB /* Localizable.strings */,
+				291E01F71F43F08C00F390EB /* InfoPllist.strings */,
 				FA6BD9CE1EE7C801005F2EF3 /* GCD.xcdatamodeld */,
 				FA6BD9C21EE7C801005F2EF3 /* Supporting Files */,
 			);
@@ -232,8 +247,9 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				"zh-Hans",
+				en,
 			);
 			mainGroup = FA6BD9B61EE7C801005F2EF3;
 			productRefGroup = FA6BD9C01EE7C801005F2EF3 /* Products */;
@@ -252,8 +268,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				291E01EC1F43EACF00F390EB /* Localizable.strings in Resources */,
 				FA6BD9D51EE7C801005F2EF3 /* LaunchScreen.storyboard in Resources */,
+				291E01F51F43F08C00F390EB /* InfoPllist.strings in Resources */,
 				FA6BD9D21EE7C801005F2EF3 /* Assets.xcassets in Resources */,
+				291E01F21F43EBDB00F390EB /* Info.plist in Resources */,
 				FA6BD9CD1EE7C801005F2EF3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,10 +337,32 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		291E01EE1F43EACF00F390EB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				291E01ED1F43EACF00F390EB /* Base */,
+				291E01EF1F43EAD200F390EB /* zh-Hans */,
+				291E01F01F43EAD400F390EB /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		291E01F71F43F08C00F390EB /* InfoPllist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				291E01F61F43F08C00F390EB /* Base */,
+				291E01F81F43F09000F390EB /* zh-Hans */,
+				291E01F91F43F09100F390EB /* en */,
+			);
+			name = InfoPllist.strings;
+			sourceTree = "<group>";
+		};
 		FA6BD9CB1EE7C801005F2EF3 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				FA6BD9CC1EE7C801005F2EF3 /* Base */,
+				291E01D51F43E3C800F390EB /* en */,
+				291E01D71F43E3DF00F390EB /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -330,6 +371,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				FA6BD9D41EE7C801005F2EF3 /* Base */,
+				291E01D61F43E3C800F390EB /* en */,
+				291E01D81F43E3DF00F390EB /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -341,6 +384,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -389,6 +433,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -520,6 +565,7 @@
 				FA6BD9F11EE7C801005F2EF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FA6BD9F21EE7C801005F2EF3 /* Build configuration list for PBXNativeTarget "GCDTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +574,7 @@
 				FA6BD9F41EE7C801005F2EF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FA6BD9F51EE7C801005F2EF3 /* Build configuration list for PBXNativeTarget "GCDUITests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +583,7 @@
 				FA6BD9F71EE7C801005F2EF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

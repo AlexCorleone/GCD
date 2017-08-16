@@ -18,6 +18,11 @@
 {
     [super viewDidLoad];
     [self aboutGCD];
+    UILabel *showText = [UILabel new];
+    [self.view addSubview:showText];
+    [showText setFrame:CGRectMake(10, 100, 200, 40)];
+//    [showText setText:NSLocalizedString(@"CFBundleDisplayName", nil)];
+    [showText setText:NSLocalizedStringFromTable(@"test", @"InfoPllist", nil)];
 }
 
 #pragma mark - public Method
