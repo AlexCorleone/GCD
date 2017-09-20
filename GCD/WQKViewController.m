@@ -6,23 +6,18 @@
 //  Copyright © 2017年 AlexCorleone. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "WQKViewController.h"
 
-@interface ViewController ()
+@interface WQKViewController ()
 
 @end
 
-@implementation ViewController
+@implementation WQKViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self aboutGCD];
-    UILabel *showText = [UILabel new];
-    [self.view addSubview:showText];
-    [showText setFrame:CGRectMake(10, 100, 200, 40)];
-//    [showText setText:NSLocalizedString(@"CFBundleDisplayName", nil)];
-    [showText setText:NSLocalizedStringFromTable(@"test", @"InfoPllist", nil)];
 }
 
 #pragma mark - public Method
@@ -30,68 +25,102 @@
 #pragma mark - private Method
 - (void)aboutGCD
 {
-    //自己创建 serial queue （串行队列）
-    const char * alexSerialLabel = "Alex.Serial.Identifier";
-    const char * alexConcurrentLabel = "Alex.Concurrenr.identifier";
-    dispatch_queue_t customSerialQueue = dispatch_queue_create(alexSerialLabel, DISPATCH_QUEUE_SERIAL);
-    //自己创建 concurrent queue（并发队列）
-    dispatch_queue_t customConcurrentQueue = dispatch_queue_create(alexConcurrentLabel, DISPATCH_QUEUE_CONCURRENT);
     //系统创建的Queue
-    //serial Queue
+    //一个默认的与主线程绑定的队列，称之为主队列,主线程是在main()函数被调用之前被创建，创建主线程的同时主队列也一起被创建，提交到主队列的blocks将会在主线程执行。串行队列（serial Queue）
+    
     dispatch_queue_t mainQueue = dispatch_get_main_queue();
-    //concurrent Queue
-    //DISPATCH_QUEUE_PRIORITY_HIGH          高优先级    （最先添加执行的优先级）
-    //DISPATCH_QUEUE_PRIORITY_DEFAULT       默认优先级   （在高优先级之后添加执行）
-    //DISPATCH_QUEUE_PRIORITY_LOW           低优先级    （在默认优先级之后添加执行）
-    //DISPATCH_QUEUE_PRIORITY_BACKGROUND    后台模式    （在所有高优先级都被添加到执行队列并且系统将在后台的当前Queue执行任务才被添加并执行）
+    
+    //一个众所周知的全局队列，随之绑定这一个优先级标志  并发队列(concurrent Queue)
+    //identifier 标识全局队列的优先级
+        //DISPATCH_QUEUE_PRIORITY_HIGH          高优先级    （最先添加执行的优先级）
+        //DISPATCH_QUEUE_PRIORITY_DEFAULT       默认优先级   （在高优先级之后添加执行）
+        //DISPATCH_QUEUE_PRIORITY_LOW           低优先级    （在默认优先级之后添加执行）
+        //DISPATCH_QUEUE_PRIORITY_BACKGROUND    后台模式    （在所有高优先级都被添加到执行队列并且系统将在后台的当前Queue执行任务才被添加并执行）
+    //flags 保留参数，传NULL
+    //注意:如果global Queue不存在的情况下，该方法可能返回一个NULL对象。
+    
     dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
-    const char *serialLabel = dispatch_queue_get_label(customSerialQueue);
-    const char *concurrentLabel = dispatch_queue_get_label(customConcurrentQueue);
-    const char *mainLabel = dispatch_queue_get_label(mainQueue);
-    const char *globalLabel = dispatch_queue_get_label(globalQueue);
-    //    NSLog(@"-- %s -- %s -- %s -- %s --", serialLabel, concurrentLabel, mainLabel, globalLabel);
     {
+        
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             //创建执行一次的任务
         });
         
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             //10秒后执行Block，具体到block可能是11秒
         });
+        
     }
-    {
-        //dispatch_group_t
-//        dispatch_group_t group = dispatch_group_create();
-//        dispatch_group_async(group, globalQueue, ^{
+
+    //自己创建 serial queue （串行队列）
+    const char * alexSerialLabel = "Alex.Serial.Identifier";
+    dispatch_queue_t customSerialQueue = dispatch_queue_create(alexSerialLabel, DISPATCH_QUEUE_SERIAL);
+    
+    //自己创建 concurrent queue（并发队列）
+    const char * alexConcurrentLabel = "Alex.Concurrenr.identifier";
+    dispatch_queue_t customConcurrentQueue = dispatch_queue_create(alexConcurrentLabel, DISPATCH_QUEUE_CONCURRENT);
+    
+    const char *serialLabel = dispatch_queue_get_label(customSerialQueue);
+    const char *concurrentLabel = dispatch_queue_get_label(customConcurrentQueue);
+    const char *mainLabel = dispatch_queue_get_label(mainQueue);
+    const char *globalLabel = dispatch_queue_get_label(globalQueue);
+//        NSLog(@"-- %s -- %s -- %s -- %s --", serialLabel, concurrentLabel, mainLabel, globalLabel);
+//    {
+//        //dispatch_group_t
+//        
+//        dispatch_async(customConcurrentQueue, ^{
+//            
+//            dispatch_group_t group = dispatch_group_create();
+//            dispatch_group_async(group, globalQueue, ^{
+//                [self doNothingButWithLongTime];
+//                [self doNothingButWithLongTime];
+//                NSLog(@"111111 %@", [NSThread currentThread]);
+//            });
+//            dispatch_group_async(group, globalQueue, ^{
+//                NSLog(@"222222 %@", [NSThread currentThread]);
+//            });
 //            dispatch_group_enter(group);
 //            [self doNothingButWithLongTime];
-//            NSLog(@"111111");
+//            NSLog(@"enter ----- leave %@", [NSThread currentThread]);
 //            dispatch_group_leave(group);
-//        });
-//        dispatch_group_async(group, globalQueue, ^{
+//            dispatch_group_async(group, globalQueue, ^{
+////                [self doNothingButWithLongTime];
+////                [self doNothingButWithLongTime];
+//                NSLog(@"333333 %@", [NSThread currentThread]);
+//            });
 //            [self doNothingButWithLongTime];
-//            NSLog(@"222222");
+////            dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+////            dispatch_group_notify(group, globalQueue, ^{
+////                NSLog(@"group Exeture End %@", [NSThread currentThread]);
+////            });
+//            NSLog(@"-------- %@", [NSThread currentThread]);
 //        });
-//        dispatch_group_async(group, globalQueue, ^{
+//    }
+    
+    
+
+//    dispatch_async(customConcurrentQueue,  ^{
+//        NSLog(@"--- 11111 asyn %@", [NSThread currentThread]);
+//        dispatch_sync(customSerialQueue, ^{
 //            [self doNothingButWithLongTime];
-//            NSLog(@"333333");
+//            NSLog(@"--- 22222 syn %@", [NSThread currentThread]);
 //        });
-//        dispatch_group_notify(group, mainQueue, ^{
-//            NSLog(@"group Exeture End");
+//        dispatch_sync(customSerialQueue, ^{
+//            NSLog(@"--- 333333 syn %@", [NSThread currentThread]);
 //        });
-//        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-//        NSLog(@"--------");
-    }
+//    });
+    
     
     //同步提交
-//    [self aboutSyncQueue1:customSerialQueue queue2:customConcurrentQueue];
+    [self aboutSyncQueue1:customSerialQueue queue2:customConcurrentQueue];
     //异步提交
 //    [self aboutAsyncQueue1:customSerialQueue queue2:customConcurrentQueue];
     //set targetQueue
 //    [self aboutSetTargetQueue];
-    [self aboutDispatchSemaphore];
+//    [self aboutDispatchSemaphore];
 }
 
 /*同步提交需要等待上一个任务执行完成，
@@ -107,26 +136,24 @@
     dispatch_queue_t synConcurrentQueue = customConcurrentQueue;
     NSLog(@"syn serialQueue -------------------");
     //however * dispatch_sync() will not return until the block has finished
-    dispatch_sync(synSerialQueue, ^{
-        NSLog(@"同步提交任务到串行队列 1111");
-        dispatch_sync(synConcurrentQueue, ^{
-            [self doNothingButWithLongTime];
-            NSLog(@"同步提交任务到并发队列  2222");
-        });
-        NSLog(@"同步提交任务到串行队列 3333");
-        dispatch_sync(synConcurrentQueue, ^{
-            [self doNothingButWithLongTime];
-            NSLog(@"同步提交任务到并发队列  4444");
-        });
-        NSLog(@"同步提交任务到串行队列 5555");
-        //在串行队列同步提交的任务中包含同步提交的串行任务程序崩溃
-        //dispatch_sync(customSerialQueue, ^{
-        //    NSLog(@"同步提交到串行队列");
-        //});
-    });
-    dispatch_sync(synSerialQueue, ^{
-        NSLog(@"同步提交任务到串行队列 6666");
-    });
+    
+//    dispatch_async(customConcurrentQueue, ^{
+//        NSLog(@"同步提交任务到串行队列 0000%@", [NSThread currentThread]);
+//        dispatch_sync(synSerialQueue, ^{
+//            [self doNothingButWithLongTime];
+//            NSLog(@"同步提交任务到串行队列 1111%@", [NSThread currentThread]);
+//            dispatch_sync(synConcurrentQueue, ^{
+//                [self doNothingButWithLongTime];
+//                NSLog(@"同步提交任务到并发队列  2222%@", [NSThread currentThread]);
+//            });
+//            dispatch_sync(synConcurrentQueue, ^{
+//                NSLog(@"同步提交任务到并发队列  3333%@", [NSThread currentThread]);
+//            });
+//        });
+//        dispatch_sync(synSerialQueue, ^{
+//            NSLog(@"同步提交任务到串行队列 6666%@", [NSThread currentThread]);
+//        });
+//    });
     
     /*
      2017-06-07 16:29:14.456 GCD[4420:580836] 同步提交任务到串行队列 1111
@@ -138,21 +165,29 @@
      */
     
     NSLog(@"syn concurrentQueue -------------------");
-    dispatch_sync(synConcurrentQueue, ^{
-        NSLog(@"同步提交任务到并发队列 1111");
-        dispatch_sync(synSerialQueue, ^{
-            [self doNothingButWithLongTime];
-            NSLog(@"同步提交任务到串行队列 2222");
+    dispatch_async(synSerialQueue, ^{
+        NSLog(@"同步提交任务到并发队列 0000%@", [NSThread currentThread]);
+        dispatch_async(synConcurrentQueue, ^{
+            NSLog(@"同步提交任务到并发队列 1111%@", [NSThread currentThread]);
+            dispatch_sync(synSerialQueue, ^{
+                [self doNothingButWithLongTime];
+                [self doNothingButWithLongTime];
+                NSLog(@"同步提交任务到串行队列 2222%@", [NSThread currentThread]);
+            });
+            dispatch_sync(synSerialQueue, ^{
+//                [self doNothingButWithLongTime];
+                NSLog(@"同步提交任务到串行队列 3333%@", [NSThread currentThread]);
+            });
         });
-        dispatch_sync(synSerialQueue, ^{
-            [self doNothingButWithLongTime];
-            NSLog(@"同步提交任务到串行队列 3333");
-        });
-        NSLog(@"同步提交任务到并发队列 4444");
     });
-    dispatch_sync(synConcurrentQueue, ^{
-        NSLog(@"同步提交任务到并发队列 5555");
-    });
+//    dispatch_sync(synConcurrentQueue, ^{
+//        [self doNothingButWithLongTime];
+//        NSLog(@"同步提交任务到并发队列 4444%@", [NSThread currentThread]);
+//    });
+//    dispatch_sync(synConcurrentQueue, ^{
+//        NSLog(@"同步提交任务到并发队列 5555%@", [NSThread currentThread]);
+//    });
+
 
     /*
      2017-06-07 16:37:10.861 GCD[4491:585762] 同步提交任务到并发队列 1111
@@ -395,5 +430,10 @@
     [super didReceiveMemoryWarning];
 }
 
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"  ---- touch began click ---");
+}
 
 @end
