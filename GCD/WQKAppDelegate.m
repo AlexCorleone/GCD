@@ -6,17 +6,22 @@
 //  Copyright © 2017年 AlexCorleone. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "WQKAppDelegate.h"
 
-@interface AppDelegate ()
+@interface WQKAppDelegate ()
 
 @end
 
-@implementation AppDelegate
+@implementation WQKAppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [_window setBackgroundColor:[UIColor whiteColor]];
+    [_window setRootViewController:[NSClassFromString(@"WQKViewController") new]];
+    [_window makeKeyWindow];
+    [_window makeKeyAndVisible];
     return YES;
 }
 
