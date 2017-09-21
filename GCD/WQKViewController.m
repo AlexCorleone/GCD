@@ -171,15 +171,15 @@
             NSLog(@"同步提交任务到并发队列 1111%@", [NSThread currentThread]);
             dispatch_sync(synSerialQueue, ^{
                 [self doNothingButWithLongTime];
-                [self doNothingButWithLongTime];
                 NSLog(@"同步提交任务到串行队列 2222%@", [NSThread currentThread]);
             });
             dispatch_sync(synSerialQueue, ^{
-//                [self doNothingButWithLongTime];
+                [self doNothingButWithLongTime];
                 NSLog(@"同步提交任务到串行队列 3333%@", [NSThread currentThread]);
             });
         });
     });
+    
 //    dispatch_sync(synConcurrentQueue, ^{
 //        [self doNothingButWithLongTime];
 //        NSLog(@"同步提交任务到并发队列 4444%@", [NSThread currentThread]);
