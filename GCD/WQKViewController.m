@@ -155,6 +155,23 @@
 //        });
 //    });
     
+    
+//    dispatch_sync(synSerialQueue, ^{
+//        NSLog(@"----- 11111 %@", [NSThread currentThread]);
+//        dispatch_sync(synSerialQueue, ^{
+//            NSLog(@"----- 22222 %@", [NSThread currentThread]);
+//        });
+//    });
+    
+//    dispatch_async(synSerialQueue, ^{
+//        dispatch_sync(synConcurrentQueue, ^{
+//            NSLog(@"----- 11111 %@", [NSThread currentThread]);
+//            dispatch_sync(synSerialQueue, ^{
+//                NSLog(@"----- 22222 %@", [NSThread currentThread]);
+//            });
+//        });
+//    });
+    
     /*
      2017-06-07 16:29:14.456 GCD[4420:580836] 同步提交任务到串行队列 1111
      2017-06-07 16:29:34.316 GCD[4420:580836] 同步提交任务到并发队列  2222
@@ -165,21 +182,22 @@
      */
     
     NSLog(@"syn concurrentQueue -------------------");
+    
     dispatch_async(synSerialQueue, ^{
         NSLog(@"同步提交任务到并发队列 0000%@", [NSThread currentThread]);
-        dispatch_async(synConcurrentQueue, ^{
+        dispatch_sync(synConcurrentQueue, ^{
             NSLog(@"同步提交任务到并发队列 1111%@", [NSThread currentThread]);
-            dispatch_sync(synSerialQueue, ^{
+            dispatch_async(synSerialQueue, ^{
                 [self doNothingButWithLongTime];
                 [self doNothingButWithLongTime];
                 NSLog(@"同步提交任务到串行队列 2222%@", [NSThread currentThread]);
             });
-            dispatch_sync(synSerialQueue, ^{
-//                [self doNothingButWithLongTime];
+            dispatch_async(synSerialQueue, ^{
                 NSLog(@"同步提交任务到串行队列 3333%@", [NSThread currentThread]);
             });
         });
     });
+    
 //    dispatch_sync(synConcurrentQueue, ^{
 //        [self doNothingButWithLongTime];
 //        NSLog(@"同步提交任务到并发队列 4444%@", [NSThread currentThread]);
