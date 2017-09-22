@@ -115,9 +115,9 @@
     
     
     //同步提交
-    [self aboutSyncQueue1:customSerialQueue queue2:customConcurrentQueue];
+//    [self aboutSyncQueue1:customSerialQueue queue2:customConcurrentQueue];
     //异步提交
-//    [self aboutAsyncQueue1:customSerialQueue queue2:customConcurrentQueue];
+    [self aboutAsyncQueue1:customSerialQueue queue2:customConcurrentQueue];
     //set targetQueue
 //    [self aboutSetTargetQueue];
 //    [self aboutDispatchSemaphore];
@@ -130,6 +130,7 @@
 - (void)aboutSyncQueue1:(dispatch_queue_t)customSerialQueue
                  queue2:(dispatch_queue_t) customConcurrentQueue
 {
+    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     //同步提交   synchronous
     //Submits a block for synchronous execution on a dispatch queue.
     dispatch_queue_t synSerialQueue = customSerialQueue;
@@ -137,23 +138,34 @@
     NSLog(@"syn serialQueue -------------------");
     //however * dispatch_sync() will not return until the block has finished
     
-//    dispatch_async(customConcurrentQueue, ^{
-//        NSLog(@"同步提交任务到串行队列 0000%@", [NSThread currentThread]);
-//        dispatch_sync(synSerialQueue, ^{
-//            [self doNothingButWithLongTime];
-//            NSLog(@"同步提交任务到串行队列 1111%@", [NSThread currentThread]);
-//            dispatch_sync(synConcurrentQueue, ^{
-//                [self doNothingButWithLongTime];
-//                NSLog(@"同步提交任务到并发队列  2222%@", [NSThread currentThread]);
-//            });
-//            dispatch_sync(synConcurrentQueue, ^{
-//                NSLog(@"同步提交任务到并发队列  3333%@", [NSThread currentThread]);
-//            });
-//        });
-//        dispatch_sync(synSerialQueue, ^{
-//            NSLog(@"同步提交任务到串行队列 6666%@", [NSThread currentThread]);
-//        });
+    
+//    dispatch_sync(synSerialQueue, ^{
+//        [self doNothingButWithLongTime];
+//        NSLog(@"------- 0000%@", [NSThread currentThread]);
 //    });
+//    dispatch_sync(synSerialQueue, ^{
+//        NSLog(@"------- 1111%@", [NSThread currentThread]);
+//    });
+//    NSLog(@"---- 提交结束 ---");
+    
+    
+//    dispatch_async(globalQueue, ^{
+//        NSLog(@"---- 0000%@", [NSThread currentThread]);
+//        dispatch_sync(synConcurrentQueue, ^{
+//            dispatch_sync(synSerialQueue, ^{
+//                NSLog(@"----  2222%@", [NSThread currentThread]);
+//            });
+//            NSLog(@"---- 1111%@", [NSThread currentThread]);
+//        });
+//        dispatch_sync(synConcurrentQueue, ^{
+//            NSLog(@"----  3333%@", [NSThread currentThread]);
+//        });
+//        dispatch_sync(synConcurrentQueue, ^{
+//            NSLog(@"---- 6666%@", [NSThread currentThread]);
+//        });
+//        NSLog(@"---- 提交结束 ---");
+//    });
+    
     
     /*
      2017-06-07 16:29:14.456 GCD[4420:580836] 同步提交任务到串行队列 1111
@@ -164,21 +176,23 @@
      2017-06-07 16:29:54.265 GCD[4420:580836] 同步提交任务到串行队列 6666
      */
     
-    NSLog(@"syn concurrentQueue -------------------");
-    dispatch_async(synSerialQueue, ^{
-        NSLog(@"同步提交任务到并发队列 0000%@", [NSThread currentThread]);
-        dispatch_async(synConcurrentQueue, ^{
-            NSLog(@"同步提交任务到并发队列 1111%@", [NSThread currentThread]);
-            dispatch_sync(synSerialQueue, ^{
-                [self doNothingButWithLongTime];
-                NSLog(@"同步提交任务到串行队列 2222%@", [NSThread currentThread]);
-            });
-            dispatch_sync(synSerialQueue, ^{
-                [self doNothingButWithLongTime];
-                NSLog(@"同步提交任务到串行队列 3333%@", [NSThread currentThread]);
-            });
-        });
-    });
+//    NSLog(@"syn concurrentQueue -------------------");
+    
+//    dispatch_async(globalQueue, ^{
+//        NSLog(@"---- 0000%@", [NSThread currentThread]);
+//        dispatch_sync(customConcurrentQueue, ^{
+//            NSLog(@"---- 1111%@", [NSThread currentThread]);
+//            dispatch_sync(synSerialQueue, ^{
+//                [self doNothingButWithLongTime];
+//                NSLog(@"---- 2222%@", [NSThread currentThread]);
+//            });
+//            dispatch_sync(synSerialQueue, ^{
+//                NSLog(@"---- 3333%@", [NSThread currentThread]);
+//            });
+//            NSLog(@"---- 提交结束 ---");
+//        });
+//    });
+//    NSLog(@"---- 主线程继续 ----");
     
 //    dispatch_sync(synConcurrentQueue, ^{
 //        [self doNothingButWithLongTime];
@@ -204,33 +218,31 @@
 - (void)aboutAsyncQueue1:(dispatch_queue_t)customSerialQueue
                  queue2:(dispatch_queue_t) customConcurrentQueue
 {
+    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     //异步提交   Asynchronous
     //Submits a block for asynchronous execution on a dispatch queue.
     dispatch_queue_t asynSerialQueue = customSerialQueue;
     dispatch_queue_t asynConcurrentQueue = customConcurrentQueue;
     //NSLog(@"asyn serialQueue  (serialQueue)-------------------");
 
+    //异步提交不需要等待，并且默认开辟的子线程，提交到队列的任务会在子线程执行，所以任务提交能够很快在当前线程执行完毕，不会阻塞当前线程，但是提交的任务执行过程和提交到串行队列还是并行队列有关。
+    //如果是提交到串行队列，那么提交的任务会按照提交顺序，依次执行。
 //    dispatch_async(asynSerialQueue, ^{
-//        NSLog(@"异步提交任务到串行队列  1111");
+//        NSLog(@"----  1111%@", [NSThread currentThread]);
 //        dispatch_async(asynSerialQueue, ^{
-//            [self doNothingButWithLongTime];
-//            NSLog(@"异步提交任务到串行队列 2222");
+//            NSLog(@"---- 2222%@", [NSThread currentThread]);
 //        });
-////        [self doNothingButWithLongTime];
-//        NSLog(@"异步提交任务到串行队列  3333");
+//        [self doNothingButWithLongTime];
+//        NSLog(@"---- 3333%@", [NSThread currentThread]);
 //    });
 //    dispatch_async(asynSerialQueue, ^{
-//        NSLog(@"异步提交任务到串行队列  4444");
+//        [self doNothingButWithLongTime];
+//        NSLog(@"----  4444%@", [NSThread currentThread]);
 //    });
+//    NSLog(@"---- 提交结束---");
     
-    /*
-     2017-06-07 16:09:41.334 GCD[4356:572074] 异步提交任务到串行队列  1111
-     2017-06-07 16:10:02.978 GCD[4356:572074] 异步提交任务到串行队列  3333
-     2017-06-07 16:10:02.978 GCD[4356:572074] 异步提交任务到串行队列  4444
-     2017-06-07 16:10:24.867 GCD[4356:572074] 异步提交任务到串行队列 2222
-     */
+    //(@"asyn serialQueue (concurrentQueue) -------------------");
     
-    //NSLog(@"asyn serialQueue (concurrentQueue) -------------------");
 //    dispatch_async(asynSerialQueue, ^{
 //        [self doNothingButWithLongTime];
 //        NSLog(@"异步提交任务到串行队列  1111");
@@ -247,15 +259,6 @@
 //    dispatch_async(asynSerialQueue, ^{
 //        NSLog(@"异步提交任务到串行队列  5555");
 //    });
-    
-    /*
-     2017-06-07 16:02:37.292 GCD[4304:567932] 异步提交任务到串行队列  1111
-     2017-06-07 16:02:37.292 GCD[4304:567932] 异步提交任务到串行队列  4444
-     2017-06-07 16:02:37.292 GCD[4304:567932] 异步提交任务到串行队列  5555
-     2017-06-07 16:02:56.570 GCD[4304:567930] 异步提交任务到并发队列  2222
-     2017-06-07 16:02:56.575 GCD[4304:567929] 异步提交任务到并发队列  3333
-     //2222 与 3333 的执行顺序不确定
-     */
     
     //NSLog(@"asyn concurrentQueue (serialQueue) -------------------");
 //    dispatch_async(asynConcurrentQueue, ^{
@@ -284,17 +287,23 @@
      */
     
     //NSLog(@"asyn concurrentQueue (concurrentQueue) -------------------");
+    
+    //异步提交到并发队列的任务执行顺序具有不可预测性，因为并发队列在执行异步任务时，会创建多条子线程(具体创建多少条与最大并发数有关)，每个提交到并发队列的block被分配到不同的子线程执行。所以执行顺序与执行block的耗时有关，耗时较少的会先执行完毕，耗时最多的block最后执行完毕。
 //    dispatch_async(asynConcurrentQueue, ^{
-//        NSLog(@"异步提交任务到并发队列 1111");
+//        NSLog(@"---- 1111%@", [NSThread currentThread]);
 //        dispatch_async(asynConcurrentQueue, ^{
-//            NSLog(@"异步提交任务到并发队列 2222");
+//            NSLog(@"---- 2222%@", [NSThread currentThread]);
 //        });
-//        NSLog(@"异步提交任务到并发队列 3333");
+//        [self doNothingButWithLongTime];
+//        [self doNothingButWithLongTime];
+//        NSLog(@"---- 3333%@", [NSThread currentThread]);
 //    });
-//    
 //    dispatch_async(asynConcurrentQueue, ^{
-//        NSLog(@"异步提交任务到并发队列 4444");
+//        [self doNothingButWithLongTime];
+//        NSLog(@"---- 4444%@", [NSThread currentThread]);
 //    });
+//    NSLog(@"---- 提交结束---");
+
     
     /*
      2017-06-07 16:51:32.976 GCD[4599:593523] 异步提交任务到并发队列 1111
@@ -304,6 +313,8 @@
      */
 //    NSLog(@"%@", dispatch_get_main_queue());
 //    NSLog(@"%@", dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+    
+    
     dispatch_async(asynConcurrentQueue, ^{
         [self doNothingButWithLongTime];
         NSLog(@"111%@", [NSThread currentThread]);
@@ -320,6 +331,8 @@
     dispatch_async(asynConcurrentQueue, ^{
         NSLog(@"555%@", [NSThread currentThread]);
     });
+    NSLog(@"---- 任务提交结束 ----");
+    
     /*
      2017-06-10 10:34:46.452 GCD[7716:1277374] 222<NSThread: 0x608000075500>{number = 3, name = (null)}
      2017-06-10 10:35:08.015 GCD[7716:1277391] 111<NSThread: 0x600000070c80>{number = 4, name = (null)}
@@ -384,22 +397,29 @@
     [self inlineBlock:^NSInteger(NSString *str1, NSString *str2) {
         return 99;
     }];
-//    dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
-//    long waitResult = 1;
-//    while (1)
-//    {
-//        if (waitResult == 1)
-//        {
-//            NSLog(@"1111111");
-//            waitResult = 0;
-//            long waitResult = dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-//        }else
-//        {
-//            NSLog(@"2222222");
-//            waitResult = 1;
-//            long signalResult = dispatch_semaphore_signal(semaphore);
-//        }
-//    }
+    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    //自己创建 serial queue （串行队列）
+    const char * alexSerialLabel = "Alex.Serial.Identifier";
+    dispatch_queue_t customSerialQueue = dispatch_queue_create(alexSerialLabel, DISPATCH_QUEUE_SERIAL);
+    
+    //自己创建 concurrent queue（并发队列）
+    const char * alexConcurrentLabel = "Alex.Concurrenr.identifier";
+    dispatch_queue_t customConcurrentQueue = dispatch_queue_create(alexConcurrentLabel, DISPATCH_QUEUE_CONCURRENT);
+    
+    
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(-1);
+    dispatch_async(globalQueue, ^{
+        dispatch_sync(customSerialQueue, ^{
+            [self doNothingButWithLongTime];
+            NSLog(@"---- 信号即将发送 ----");
+            dispatch_semaphore_signal(semaphore);
+            dispatch_semaphore_signal(semaphore);
+
+        });
+    });
+    NSLog(@"---- wait ----");
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    NSLog(@"---- wait end ----");
 }
 
 - (void)inlineBlock:(NSInteger (^)(NSString *str1, NSString *str2))block
