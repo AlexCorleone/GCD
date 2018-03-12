@@ -17,6 +17,7 @@
 		FA6BD9D51EE7C801005F2EF3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA6BD9D31EE7C801005F2EF3 /* LaunchScreen.storyboard */; };
 		FA6BD9E01EE7C801005F2EF3 /* GCDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6BD9DF1EE7C801005F2EF3 /* GCDTests.m */; };
 		FA6BD9EB1EE7C801005F2EF3 /* GCDUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6BD9EA1EE7C801005F2EF3 /* GCDUITests.m */; };
+		FA7007772056D8D200E60416 /* dataTest.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FA7007762056D8D200E60416 /* dataTest.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		FA6BD9E61EE7C801005F2EF3 /* GCDUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GCDUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA6BD9EA1EE7C801005F2EF3 /* GCDUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCDUITests.m; sourceTree = "<group>"; };
 		FA6BD9EC1EE7C801005F2EF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA7007762056D8D200E60416 /* dataTest.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dataTest.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 		FA6BD9C11EE7C801005F2EF3 /* GCD */ = {
 			isa = PBXGroup;
 			children = (
+				FA7007762056D8D200E60416 /* dataTest.mp3 */,
 				FA6BD9C51EE7C801005F2EF3 /* WQKAppDelegate.h */,
 				FA6BD9C61EE7C801005F2EF3 /* WQKAppDelegate.m */,
 				FA6BD9C81EE7C801005F2EF3 /* WQKViewController.h */,
@@ -258,6 +261,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA7007772056D8D200E60416 /* dataTest.mp3 in Resources */,
 				FA6BD9D51EE7C801005F2EF3 /* LaunchScreen.storyboard in Resources */,
 				FA6BD9D21EE7C801005F2EF3 /* Assets.xcassets in Resources */,
 				291E01F21F43EBDB00F390EB /* Info.plist in Resources */,

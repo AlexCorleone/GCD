@@ -17,7 +17,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self aboutGCD];
+//    [self aboutGCD];
+    [self deepDectedGCD];
 }
 
 #pragma mark - public Method
@@ -42,17 +43,14 @@
     dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
     {
-        
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             //创建执行一次的任务
         });
         
-        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             //10秒后执行Block，具体到block可能是11秒
         });
-        
     }
 
     //自己创建 serial queue （串行队列）
@@ -167,7 +165,6 @@
 //    });
     
     
-<<<<<<< HEAD
 //    dispatch_sync(synSerialQueue, ^{
 //        NSLog(@"----- 11111 %@", [NSThread currentThread]);
 //        dispatch_sync(synSerialQueue, ^{
@@ -217,7 +214,6 @@
 //        });
 //    });
 //    NSLog(@"---- 主线程继续 ----");
->>>>>>> 18402f4382be69e01d6827d25d3924015ebef491
     
 //    dispatch_sync(synConcurrentQueue, ^{
 //        [self doNothingButWithLongTime];
@@ -470,6 +466,111 @@
     {
     }
 }
+
+
+
+#pragma mark - GCD 高级使用
+
+- (void)deepDectedGCD
+{
+//    [self createTimerWithDispatchSource];
+    [self getFileDataWith:[[NSBundle mainBundle] pathForResource:@"dataTest" ofType:@".mp3"]];
+}
+
+
+- (void)createTimerWithDispatchSource
+{
+    //创建一个Timer对象
+    dispatch_source_t theTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_queue_create("timer queue",NULL));
+    __block int i = 0;
+    
+    printf("Starting to count by seconds\n");
+    //为Timer对象指定回调Block
+    dispatch_source_set_event_handler(theTimer, ^{
+        printf("%d\n", ++i);
+        if (i >= 6) {
+            printf("i>6\n");
+            dispatch_source_cancel(theTimer);
+        }
+        if (i == 3) {
+            printf("switching to half seconds\n");
+            dispatch_source_set_timer(theTimer, DISPATCH_TIME_NOW, NSEC_PER_SEC / 2, 0);
+        }
+    });
+    //为Timer对象指定取消事件的回调Block
+    dispatch_source_set_cancel_handler(theTimer, ^{
+        printf("dispatch source canceled OK\n");
+        //            dispatch_release(theTimer);
+//        exit(0);
+    });
+    
+    dispatch_source_set_timer(theTimer, dispatch_time(DISPATCH_TIME_NOW,NSEC_PER_SEC) , NSEC_PER_SEC, 0);
+    
+    dispatch_resume(theTimer);
+    //        dispatch_main();
+}
+
+
+- (void)getFileDataWith:(NSString *)outFilePath
+{
+    int infd;
+    dispatch_source_t    fileSource;
+    
+    const char *filePath = [outFilePath cStringUsingEncoding:NSUTF8StringEncoding];
+    
+    infd = open(filePath, O_RDONLY);
+    if (infd == -1) {
+        perror(filePath);
+        //            exit(1);
+    }
+    
+    if (fcntl(infd, F_SETFL, O_NONBLOCK) != 0) {
+        perror(filePath);
+        //            exit(1);
+    }
+    
+    fileSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, infd, 0, dispatch_queue_create("read source queue",NULL));
+    dispatch_source_set_event_handler_f( fileSource, readFileData);
+    dispatch_source_set_cancel_handler_f( fileSource, cancelSource);
+    // setting the context pointer to point to the source itself means the functions will get the source
+    // as a paremeter, from there they can get all the information they need.
+    dispatch_set_context(fileSource, (__bridge void * _Nullable)(fileSource));
+    dispatch_resume(fileSource);
+    
+    dispatch_main();
+
+}
+
+void readFileData(void* theSource) {
+    char buffer[1000];//一次读取的文件大小
+    size_t estimated = dispatch_source_get_data((__bridge dispatch_source_t _Nonnull)(theSource));
+    printf("Estimated bytes available: %ld\n", estimated);
+    ssize_t actual = read((int)dispatch_source_get_handle((__bridge dispatch_source_t _Nonnull)(theSource)), buffer, sizeof(buffer));
+    if (actual == -1) {
+        if (errno != EAGAIN) {
+            perror("read");
+            exit(-1);
+        }
+    } else {
+        if  (estimated>actual) {
+            printf("  bytes read: %ld\n", actual);
+        } else {
+            // end of file has been reached.
+            printf("  last bytes read: %ld\n", actual);
+            dispatch_source_cancel((__bridge dispatch_source_t _Nonnull)(theSource));
+        }
+    }
+}
+
+
+void cancelSource(void* theSource) {
+    close((int)dispatch_source_get_handle((__bridge dispatch_source_t _Nonnull)(theSource)));
+    //    dispatch_release(theSource);
+    //    dispatch_release(dispatch_get_current_queue());
+    printf("Everything is finished, goodbye.\n");
+    exit(0);
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
